@@ -25,6 +25,7 @@ offer_types = list(float(i) for i in diff_df_sc.columns)
 user_types = list(diff_df_sc.index)
 offer_descrip = list(offer_info.columns)
 
+
 diff_shared = diff_df_sc - diff_df_exp_sc
 diff_shared = pd.DataFrame(StandardScaler().fit_transform(diff_shared))
 diff_shared_clean = diff_shared.applymap(lambda x: 1 if (x < 0) else 0)
