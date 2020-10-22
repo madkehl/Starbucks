@@ -65,7 +65,7 @@ navbar = dbc.Navbar(
                 align="center",
                 no_gutters=True,
             ),
-            href="https://www.github.com/madkehl/Starbucks_Web_App",
+            href="https://www.github.com/madkehl/Starbucks",
         ),
         dbc.NavbarToggler(id="navbar-toggler"),
     ],
@@ -83,7 +83,7 @@ def description_card():
             html.Br(),
             html.H3("Recommendations based on collaborative filtering techniques, Starbucks Data"),
             html.Br(),
-            html.A('This web app is designed to be a clean and simple way of visualizing the results of a rather complex analysis.  '),
+            html.A('This web app is designed to be a clean and simple way of visualizing the results of a rather complex analysis. The goal of this was to understand what offers would be most impactful for which demographics.  Information such as age, income, gender and years member was available for analysis as well as offers and their various characteristics.  More behind-the-scenes data cleaning and analysis, as well as other intermediary discussion is available in the Github for the project and the Jupyter notebook rendering.'),
             html.A("If you love this, please visit the full project either by clicking my name above (my Github) or viewing the full notebook here.", href = 'https://nbviewer.jupyter.org/github/madkehl/Capstone/blob/main/Starbucks%20Capstone%20.ipynb'),
             html.Div(
                 id="intro",
