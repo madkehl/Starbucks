@@ -1,4 +1,4 @@
-##heavily borrowed from https://github.com/plotly/dash-sample-apps/tree/master/apps/dash-clinical-analytics
+##borrowed from https://github.com/plotly/dash-sample-apps/tree/master/apps/dash-clinical-analytics
 #key imports
 import pandas as pd
 import dash
