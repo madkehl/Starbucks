@@ -165,8 +165,9 @@ def generate_bar_chart_all(offer_des, reset):
             offer_vals = offer_vals[[str(i) for i in offer_t['offer_id']]]
 
         types = offer_info.loc[[float(i) for i in offer_vals.index]]
+        types = types.mul(offer_vals.values, axis = 0)
         types_sums = types.mean(axis = 0)
-        types_most_successful = types_sums[types_sums.values > 0]
+        types_most_successful = types_sums[abs(types_sums).values > 0]
     
         fig.add_trace(go.Bar(x=types_most_successful.index.values, y = types_most_successful.values, name = i[2:], marker=dict(color = offer_vals.values, colorscale='bluered')))
                   
