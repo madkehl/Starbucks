@@ -24,6 +24,10 @@ offer_info = pd.read_csv('../data/offer_info.csv', index_col = 0)
 offer_types = list(float(i) for i in diff_df_sc.columns)
 user_types = list(diff_df_sc.index)
 offer_descrip = list(offer_info.columns)
+
+
+offer_tyoes = offer_types.remove(3.0, 7.0)
+
 diff_shared = diff_df_sc - diff_df_exp_sc
 diff_shared = pd.DataFrame(StandardScaler().fit_transform(diff_shared))
 diff_shared_clean = diff_shared.applymap(lambda x: 1 if (x < 0) else 0)
@@ -167,7 +171,7 @@ def generate_bar_chart_all(offer_des, reset):
         types_sums = types.mean(axis = 0)
         types_most_successful = types_sums[abs(types_sums).values > 0]
     
-        fig.add_trace(go.Bar(x=types_most_successful.index.values, y = types_most_successful.values, name = i[2:], marker=dict(color = offer_vals.values, colorscale='bluered')))
+        fig.add_trace(go.Bar(x=types_most_successful.index.values, y = types_most_successful.values, name = i[2:], marker=dict(color =  types_most_successful.values, colorscale='bluered')))
                   
                       
     fig.update_layout(width = 1200, height = 600)
