@@ -121,9 +121,15 @@ def generate_control_card():
         ],
     )
 
+def generate_message(offer_des, reset):
 
-
-
+    offer_t = offer_info[offer_des]
+    offer_t = offer_t[offer_t.eq(1).all(axis = 1)].reset_index()
+    if offer_t.shape[0] == 0:
+        message = "No combinations of the current column selections exist. Showing full data."
+    else:
+        message = "Current selection valid. Corresponding subset of data shown."
+    return(message)
 
 def generate_bar_chart_all(offer_des, reset):
     """
@@ -155,8 +161,14 @@ def generate_bar_chart_all(offer_des, reset):
         bool_type = 0
         row = diff_shared_clean.loc[i]
         row_sig = row[row.values == 1]
-       # print(row_sig)
-        offer_types = row_sig.index.values
+
+        row_sig_filt = row_sig[row_sig.index.isin(indexer)]
+        print([row_sig_filt, indexer])
+        if(row_sig_filt.shape[0]) == 0:
+            row_sig_filt = row_sig
+    
+        offer_types = row_sig_filt.index.values
+        
     
         offer_vals = diff_agg.loc[i]
         if bool_type == 0:
@@ -183,7 +195,7 @@ def generate_bar_chart_all(offer_des, reset):
     
     return(fig)
 
-
+message = generate_message(offer_descrip, True)
 starter = generate_bar_chart_all(offer_descrip, True)
 
 image_filename = os.getcwd() + '/diff_df_styler.png' # replace with your own image
@@ -201,7 +213,8 @@ app.layout = html.Div(
         # Left column
         html.Div(id="nav", children = [navbar]),
         html.Div(id="left-column", className="four columns", children=[description_card(), generate_control_card()] + [html.Div(["initial child"], id="output-clientside", style={"display": "none"})],),
-        html.Div(id="right-column", className="eight columns", children = [dcc.Graph(id="diary_volume_hm", figure = starter)],),
+        html.I(id="graph-statement", children = [html.A(message)]),
+        html.Div(id="right-column", className="eight columns", children = [dcc.Graph(id="offer_user_recs", figure = starter)],),
         html.Br(),
         html.A('Below is an illustration of the process used to arrive at whether or not an offer was "impactful" for a demographic.'),
         html.Br(),
@@ -230,15 +243,16 @@ app.layout = html.Div(
 )
 
 #this connects user interactions with backend code
-@app.callback(
-    Output("diary_volume_hm", "figure"),
+@app.callback([
+     Output("graph-statement", "children"),
+     Output("offer_user_recs", "figure")],
     [Input("offer-select", "value"),
     Input("reset-btn", "n_clicks")],
 )
 
 #this runs when user makes selections
 
-def update_heatmap(offer_d, reset_click):
+def update_barplot(offer_d, reset_click):
     
     reset = False
     # Find which one has been triggered
@@ -249,7 +263,7 @@ def update_heatmap(offer_d, reset_click):
         if prop_id == "reset-btn":
             reset = True
             
-    return generate_bar_chart_all(offer_d, reset)
+    return (generate_message(offer_d, reset), generate_bar_chart_all(offer_d, reset))
 
 def main():
     '''
