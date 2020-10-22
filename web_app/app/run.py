@@ -74,7 +74,7 @@ navbar = dbc.Navbar(
 
 def description_card():
     """
-    :return: A Div containing dashboard title & descriptions.
+    OUTPUT: A Div containing dashboard title & descriptions.
     """
     return html.Div(
         id="description-card",
@@ -100,7 +100,7 @@ def description_card():
 
 def generate_control_card():
     """
-    :return: A Div containing controls for graphs.
+    OUTPUT: A Div containing controls for graphs.
     """
     return html.Div(
         id="control-card",
@@ -123,7 +123,11 @@ def generate_control_card():
     )
 
 def generate_message(offer_des, reset):
+    '''
+    INPUT: offer descriptors, reset click
 
+    OUTPUT: message of status of graph
+    '''
     offer_t = offer_info[offer_des]
     offer_t = offer_t[offer_t.eq(1).all(axis = 1)].reset_index()
     if offer_t.shape[0] == 0:
@@ -134,13 +138,9 @@ def generate_message(offer_des, reset):
 
 def generate_bar_chart_all(offer_des, reset):
     """
-    :param: start: start date from selection.
-    :param: end: end date from selection.
-    :param: cluster: cluster from selection.
-    :param: hm_click: clickData from heatmap.
-    :param: diary_type: diary type from selection.
-    :param: reset (boolean): reset heatmap graph if True.
-    :return: Diary volume annotated heatmap.
+    INPUT: offer descriptions reset click
+
+    OUTPUT: interactive fig with custom results
     """
     offer_t = offer_info[offer_des]
     offer_t = offer_t[offer_t.eq(1).all(axis = 1)].reset_index()
@@ -193,8 +193,12 @@ def generate_bar_chart_all(offer_des, reset):
     
     return(fig)
 
+#get starting values
+
 message = generate_message(offer_descrip, True)
 starter = generate_bar_chart_all(offer_descrip, True)
+
+#import images for below app
 
 image_filename = os.getcwd() + '/diff_df_styler.png' # replace with your own image
 encoded_image1 = base64.b64encode(open(image_filename, 'rb').read()).decode('ascii')
@@ -204,6 +208,8 @@ encoded_image2 = base64.b64encode(open(image_filename2, 'rb').read()).decode('as
 
 image_filename3 = os.getcwd() + '/df_combo_format.png' # replace with your own image
 encoded_image3 = base64.b64encode(open(image_filename3, 'rb').read()).decode('ascii')
+
+#app structure
 
 app.layout = html.Div(
     id="app-container",
@@ -251,7 +257,9 @@ app.layout = html.Div(
 #this runs when user makes selections
 
 def update_barplot(offer_d, reset_click):
-    
+    '''
+    takes in offer description list from user and their reset motive
+    '''
     reset = False
     # Find which one has been triggered
     ctx = dash.callback_context
@@ -259,7 +267,7 @@ def update_barplot(offer_d, reset_click):
     if ctx.triggered:
         prop_id = ctx.triggered[0]["prop_id"].split(".")[0]
         if prop_id == "reset-btn":
-            reset = True
+            offer_d = offer_descrip
             
     return (generate_message(offer_d, reset), generate_bar_chart_all(offer_d, reset))
 
