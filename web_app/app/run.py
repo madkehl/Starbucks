@@ -163,7 +163,7 @@ def generate_bar_chart_all(offer_des, reset):
         row_sig = row[row.values == 1]
 
         row_sig_filt = row_sig[row_sig.index.isin(indexer)]
-        print([row_sig_filt, indexer])
+   
         if(row_sig_filt.shape[0]) == 0:
             row_sig_filt = row_sig
     
@@ -182,10 +182,7 @@ def generate_bar_chart_all(offer_des, reset):
         types_sums = types.sum(axis = 0)
         types_most_successful = types_sums[abs(types_sums).values > 0.5]
         
-      #  print(types.index)
-      #  print(offer_vals)
-        
-      #  print(types_most_successful)
+ 
         fig.add_trace(go.Bar(x=types_most_successful.index.values, y = types_most_successful.values, name = i[2:], marker=dict(color =  types_most_successful.values, colorscale='bluered')))
                   
                       
