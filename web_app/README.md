@@ -1,4 +1,8 @@
-# Disaster Response Pipeline Project
+# Starbucks recommendation project
+
+The following code attempts to take information about different customers and their offer use habits to provide suggestions on what types of offers certain types of customers are most likely to respond to.
+
+In order to do this we first asses what types of users are most likely to be impacted and then look at overall, what biases exist towards what types of demographic groups, and what the most impactful offers to offer may be.  This project consists of a web app, and a jupyter notebook, as well as this readme.  Methods and technical details and discussion are available in the notebook, while this file is intended as an overview/results summary, and the web app is a visualization of final results.
 
 ### Instructions:
 [app hosted in Heroku](https://afternoon-gorge-22266.herokuapp.com/)
@@ -57,6 +61,8 @@ There were several complexities of this analysis worth discussing (some are furt
 # Discussion:
 
 Our application of a chi sq emphasizes differences in population and allowed us to produce unique profiles for each demographic group of interest, except gender otherwise specified, which had very small effect sizes (perhaps because of being underrepresented). We found that women were the demographic group most likely to be impacted by discounts and small rewards, while men were most likely to use high rewards that last a long time and have high difficulty (although this may be related to high difficulty rewards are likely to have higher value).  The age range 25 to 40 and being in income group 2 or 3 (making > 40k a year) were most likely to be impacted by bogo rewards. Income group 3 (> 75k) was most likely to be impacted by mobile rewards of mid difficulty (in addition to bogo). 
+
+Our age variable warrants further investigation, as it makes no positive recommendations for 25 and less, or 40 to 60.  While this is possible to be accurate, it's worth noting that the 40-60 is our most populated age range, while 25 and less is the least.  It is possible here that we are seeing biased sampling effects: maybe something about 40- 60 year olds has lead a higher percentage of them to sign up for rewards, resulting in a lower percent of reward users, or in contrast, they are a Starbucks-loving generation that will buy no matter what (in which case our impact weighting would have ruled out making them offers).  25 and less, despite being positively associated with overall reward impact, failed to produce specific recommendations.  This may be because, as a small group, they were more scattered/diverse and our analysis failed to pick up on a clear offer profile associated with high impact.
 
 # Contact: 
 
