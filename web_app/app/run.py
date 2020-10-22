@@ -193,11 +193,34 @@ def generate_bar_chart_all(offer_des, reset):
     
     return(fig)
 
+def control_card_accessory(offered_values):
+    """
+    OUTPUT: A Div containing controls for graphs.
+    """
+    return html.Div(
+        id="control-card",
+        children=[
+            html.Br(),
+            html.Br(),
+            html.P("Select Offer"),
+            dcc.Dropdown(
+                id="offer-select",
+                options=[{"label": i, "value": i} for i in offer_descrip],
+                value= offered_values[:],
+                multi=True
+            ),
+            html.Br(),
+            html.Div(
+                id="reset-btn-outer",
+                children=html.Button(id="reset-btn", children="Reset", n_clicks=0),
+            ),
+        ],
+    )
 #get starting values
 
 message = generate_message(offer_descrip, True)
 starter = generate_bar_chart_all(offer_descrip, True)
-
+control = generate_control_card()
 #import images for below app
 
 image_filename = os.getcwd() + '/diff_df_styler.png' # replace with your own image
@@ -216,7 +239,9 @@ app.layout = html.Div(
     children=[
         # Left column
         html.Div(id="nav", children = [navbar]),
-        html.Div(id="left-column", className="four columns", children=[description_card(), generate_control_card()] + [html.Div(["initial child"], id="output-clientside", style={"display": "none"})],),
+        html.Div(id="left-column", className="four columns", children=[description_card()]),
+        html.Div(id="control-card-div", children = [control]+
+                 [html.Div(["initial child"], id="output-clientside", style={"display": "none"})],),
         html.I(id="graph-statement", children = [html.A(message)]),
         html.Div(id="right-column", className="eight columns", children = [dcc.Graph(id="offer_user_recs", figure = starter)],),
         html.Br(),
@@ -248,6 +273,7 @@ app.layout = html.Div(
 
 #this connects user interactions with backend code
 @app.callback([
+     Output("control-card-div", "children"),
      Output("graph-statement", "children"),
      Output("offer_user_recs", "figure")],
     [Input("offer-select", "value"),
@@ -263,13 +289,17 @@ def update_barplot(offer_d, reset_click):
     reset = False
     # Find which one has been triggered
     ctx = dash.callback_context
-
+    
     if ctx.triggered:
         prop_id = ctx.triggered[0]["prop_id"].split(".")[0]
         if prop_id == "reset-btn":
             offer_d = offer_descrip
             
-    return (generate_message(offer_d, reset), generate_bar_chart_all(offer_d, reset))
+                
+    return (control_card_accessory(offer_d), generate_message(offer_d, reset), generate_bar_chart_all(offer_d, reset))
+
+
+
 
 def main():
     '''
