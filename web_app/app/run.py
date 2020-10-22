@@ -25,9 +25,6 @@ offer_types = list(float(i) for i in diff_df_sc.columns)
 user_types = list(diff_df_sc.index)
 offer_descrip = list(offer_info.columns)
 
-
-offer_tyoes = offer_types.remove(3.0, 7.0)
-
 diff_shared = diff_df_sc - diff_df_exp_sc
 diff_shared = pd.DataFrame(StandardScaler().fit_transform(diff_shared))
 diff_shared_clean = diff_shared.applymap(lambda x: 1 if (x < 0) else 0)
@@ -138,7 +135,6 @@ def generate_bar_chart_all(offer_des, reset):
     :param: reset (boolean): reset heatmap graph if True.
     :return: Diary volume annotated heatmap.
     """
-    
     offer_t = offer_info[offer_des]
     offer_t = offer_t[offer_t.eq(1).all(axis = 1)].reset_index()
     indexer = [float(i) for i in offer_t['offer_id']]
@@ -169,7 +165,7 @@ def generate_bar_chart_all(offer_des, reset):
         types = offer_info.loc[[float(i) for i in offer_vals.index]]
         types = types.mul(offer_vals.values, axis = 0)
         types_sums = types.mean(axis = 0)
-        types_most_successful = types_sums[abs(types_sums).values > 0]
+        types_most_successful = types_sums[abs(types_sums).values > 0.5]
     
         fig.add_trace(go.Bar(x=types_most_successful.index.values, y = types_most_successful.values, name = i[2:], marker=dict(color =  types_most_successful.values, colorscale='bluered')))
                   
