@@ -144,34 +144,42 @@ def generate_bar_chart_all(offer_des, reset):
         offer_t = offer_info
         indexer = [float(i) for i in offer_t.index.values]
         bool_type = 0
+        
     diff_shared_clean_filt = diff_shared_clean[indexer]
     
     hovertemplate = "<b> %{y}  %{x} <br><br> %{z} Recommended Offers <br><br> %{text} <b>"
 
     fig = go.Figure()
 
-    for i in diff_shared_clean_filt.index:
-        
-        row = diff_shared_clean_filt.loc[i]
+    for i in diff_shared_clean.index:
+        bool_type = 0
+        row = diff_shared_clean.loc[i]
         row_sig = row[row.values == 1]
+       # print(row_sig)
         offer_types = row_sig.index.values
     
         offer_vals = diff_agg.loc[i]
         if bool_type == 0:
-            offer_vals = offer_vals[[str(i) for i in indexer]]
+            offer_vals = offer_vals[[str(i) for i in offer_types]]
         else:
-            offer_vals = offer_vals[[str(i) for i in offer_t['offer_id']]]
-
-        types = offer_info.loc[[float(i) for i in offer_vals.index]]
-        types = types.mul(offer_vals.values, axis = 0)
-        types_sums = types.mean(axis = 0)
-        types_most_successful = types_sums[abs(types_sums).values > 0.5]
+            offer_vals = offer_vals[[str(i) for i in offer_types]]
+            
     
+        types = offer_info.loc[[float(i) for i in offer_vals.index.values]]
+        types = types.mul(offer_vals.values, axis = 0)
+        types_sums = types.sum(axis = 0)
+        types_most_successful = types_sums[abs(types_sums).values > 0.5]
+        
+      #  print(types.index)
+      #  print(offer_vals)
+        
+      #  print(types_most_successful)
         fig.add_trace(go.Bar(x=types_most_successful.index.values, y = types_most_successful.values, name = i[2:], marker=dict(color =  types_most_successful.values, colorscale='bluered')))
                   
                       
     fig.update_layout(width = 1200, height = 600)
     fig.update_traces(marker_showscale=False)
+    
     
     return(fig)
 
